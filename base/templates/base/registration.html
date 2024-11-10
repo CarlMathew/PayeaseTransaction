@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="{{ csrf_token }}" />
+    <title>Responsive Registration Form</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Fira Sans", sans-serif;
+        background-color: #f0f7f0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+      }
+      .container {
+        width: 100%;
+        max-width: 900px; /* Adjust max-width for two columns */
+        display: flex; /* Flexbox for two columns */
+        background-color: #fff;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+      .left-column {
+        border-radius: 15px;
+        flex: 1; /* Take 1 part of the available space */
+        padding: 40px; /* Adjust padding as needed */
+        text-align: center;
+        display: flex; /* Use flexbox */
+        flex-direction: column; /* Stack items vertically */
+        justify-content: center; /* Center vertically */
+        background-color: #ccf8cd;
+      }
+      .right-column {
+        flex: 1; /* Take 1 part of the available space */
+        padding: 40px; /* Adjust padding as needed */
+        background-color: #fdfdfd;
+        border-radius: 15px;
+      }
+      h1 {
+        font-size: 2rem;
+        color: #333;
+        margin-bottom: 15px;
+      }
+      h1 span {
+        color: #000;
+      }
+      .divider {
+        height: 2px;
+        background-color: #333;
+        margin: 10px auto 25px;
+        width: 50%;
+      }
+      .form-group {
+        margin-bottom: 20px;
+        text-align: left;
+      }
+      label {
+        font-size: 1.2rem;
+        color: #333;
+        display: block;
+        margin-bottom: 8px;
+      }
+      input[type="text"],
+      input[type="password"],
+      input[type="date"],
+      input[type="number"] {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 1.1rem;
+        color: #333;
+      }
+
+      input[type="text"]::placeholder,
+      input[type="password"]::placeholder {
+        color: #aaa;
+      }
+
+      input[type="text"]:focus,
+      input[type="number"]:focus,
+      input[type="password"]:focus,
+      input[type="date"]:focus {
+        border-color: #4caf50; /* Change border color to green */
+        outline: none; /* Remove default outline */
+        box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Optional: add a subtle glow effect */
+        color: #333; /* Maintain text color */
+      }
+
+      .buttons-container {
+        margin-top: 30px;
+        display: flex;
+        justify-content: center;
+      }
+      .button {
+        background-color: #d4e5d4;
+        border: none;
+        padding: 12px 70px;
+        border-radius: 12px;
+        font-size: 1.3rem;
+        color: #333;
+        cursor: pointer;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .button:hover {
+        background-color: #b3d9b3;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      }
+      footer {
+        margin-top: 30px;
+        font-size: 0.9rem;
+        color: #999;
+      }
+
+      /* 3D Spin Animation */
+      @keyframes spin3D {
+        0% {
+          transform: rotateY(0deg);
+        }
+        100% {
+          transform: rotateY(360deg);
+        }
+      }
+
+      .spinning-logo {
+        width: 250px; /* Adjust size as desired */
+        height: auto;
+        margin-bottom: 20px;
+        animation: spin3D 5s infinite linear;
+        transform-style: preserve-3d;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .container {
+          flex-direction: column; /* Stack columns vertically */
+        }
+        .left-column,
+        .right-column {
+          border-right: none; /* Remove the divider */
+          padding: 20px; /* Adjust padding */
+        }
+        h1 {
+          font-size: 1.8rem;
+        }
+        label {
+          font-size: 1.1rem;
+        }
+        .button {
+          font-size: 1.1rem;
+          padding: 10px 20px;
+        }
+      }
+      @media (max-width: 500px) {
+        h1 {
+          font-size: 1.5rem;
+        }
+        .container {
+          padding: 15px;
+          max-width: 90%;
+        }
+        .button {
+          font-size: 1rem;
+          padding: 8px 18px;
+        }
+      }
+      #successModal {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        position: fixed;
+        border-radius: 25px;
+        width: 300px; /* Default width for larger screens */
+        max-width: 90%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="left-column">
+        <div class="header">
+          <img
+            src="payease-logo.png"
+            alt="PayEase Logo"
+            class="spinning-logo"
+          />
+
+          <h1>Welcome to <span>PayEase Registration</span></h1>
+        </div>
+        <div class="divider"></div>
+        <p>Register now to access our amazing features!</p>
+        <footer>
+          Need help? Contact support<br /><br />
+          Developed by RRSA | All Rights Reserved 2024
+        </footer>
+      </div>
+      <div class="right-column">
+        <div class="registration-form">
+          <div class="form-group">
+            <label for="id">ID:</label>
+            <input
+              type="text"
+              id="id"
+              name="id"
+              placeholder="Enter your ID"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="Name">Name:</label>
+            <input
+              type="text"
+              id="firstName"
+              name="firstName"
+              placeholder="Enter your name"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="username">Username:</label>
+            <input
+              type="text"
+              id="userName"
+              name="userName"
+              placeholder="Enter your username"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password:</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Enter your password"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="dob">Date of Birth:</label>
+            <input type="date" id="dob" name="dob" required />
+          </div>
+          <div class="form-group">
+            <label for="amount">Amount:</label>
+            <div style="position: relative">
+              <span
+                style="
+                  position: absolute;
+                  top: 50%;
+                  left: 10px;
+                  transform: translateY(-50%);
+                  font-size: 1.1rem;
+                  color: #333;
+                "
+              >
+                ₱
+              </span>
+              <input
+                type="number"
+                id="amount"
+                name="amount"
+                placeholder="Enter amount"
+                required
+                min="0"
+                step="1"
+                style="padding-left: 25px"
+              />
+            </div>
+          </div>
+
+          <div class="buttons-container">
+            <button type="submit" class="button" id="registerBtn">
+              Register
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <dialog id="successModal" style="padding: 2rem">
+      <div
+        style="
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: column;
+        "
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="6rem"
+          height="6rem"
+          viewBox="0 0 48 48"
+        >
+          <g
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="4"
+          >
+            <path
+              fill="#6dff2e"
+              stroke="#fcfcfc"
+              d="M24 4L29.2533 7.83204L35.7557 7.81966L37.7533 14.0077L43.0211 17.8197L41 24L43.0211 30.1803L37.7533 33.9923L35.7557 40.1803L29.2533 40.168L24 44L18.7467 40.168L12.2443 40.1803L10.2467 33.9923L4.97887 30.1803L7 24L4.97887 17.8197L10.2467 14.0077L12.2443 7.81966L18.7467 7.83204L24 4Z"
+            />
+            <path stroke="#fff" d="M17 24L22 29L32 19" />
+          </g>
+        </svg>
+        <h2 style="text-align: center">Registered Successfully</h2>
+        <button
+          style="
+            background: transparent;
+            width: 100px;
+            border-radius: 25px;
+            background-color: #4caf50;
+            margin-top: 15px;
+            padding: 0.2rem;
+          "
+        >
+          <p
+            style="text-align: center; font-weight: 900; color: white"
+            id="closeModal"
+          >
+            Close
+          </p>
+        </button>
+      </div>
+    </dialog>
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.js"
+      integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      function getCSRFToken() {
+        return document
+          .querySelector('meta[name="csrf-token"]')
+          .getAttribute("content");
+      }
+
+      function registerBtn() {
+        $.ajax({
+          url: "http://127.0.0.1:8000/base/regis",
+          method: "POST",
+          headers: {
+            "X-CSRFToken": getCSRFToken(), // Include the CSRF token
+          },
+          data: JSON.stringify({
+            id: $("#id").val(),
+            name: $("#firstName").val(),
+            pass: $("#password").val(),
+            amount: $("#amount").val(),
+          }),
+          success: (response) => {
+            modal.showModal();
+          },
+          error: function (xhr, status, error) {
+            console.log("Error", error);
+          },
+        });
+      }
+
+      const modal = document.querySelector("#successModal");
+
+      document.getElementById("registerBtn").addEventListener("click", () => {
+        console.log("Register");
+        registerBtn();
+      });
+
+      document.querySelector("#closeModal").addEventListener("click", () => {
+        modal.close();
+        $("input").val("");
+      });
+    </script>
+  </body>
+</html>

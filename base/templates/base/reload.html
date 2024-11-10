@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="{{ csrf_token }}" />
+    <title>Reload Amount</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      #successModal {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        position: fixed;
+        border-radius: 25px;
+        width: 300px; /* Default width for larger screens */
+        max-width: 90%;
+      }
+      body {
+        font-family: "Fira Sans", sans-serif;
+        background-color: #f0f7f0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+      }
+      .container {
+        width: 100%;
+        max-width: 500px;
+        background-color: #fff;
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        font-size: 2rem;
+        color: #333;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .form-group {
+        margin-bottom: 20px;
+        text-align: left;
+      }
+      label {
+        font-size: 1.2rem;
+        color: #333;
+        display: block;
+        margin-bottom: 8px;
+      }
+      input[type="text"],
+      input[type="date"],
+      input[type="number"] {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 1.1rem;
+        color: #333;
+      }
+      input[type="number"] {
+        padding-left: 25px; /* Adjusts for the peso symbol */
+      }
+      input[type="text"]::placeholder,
+      input[type="number"]::placeholder {
+        color: #aaa;
+      }
+      .buttons-container {
+        margin-top: 20px;
+        text-align: center;
+      }
+      .button {
+        background-color: #d4e5d4;
+        border: none;
+        padding: 12px 50px;
+        border-radius: 12px;
+        font-size: 1.2rem;
+        color: #333;
+        cursor: pointer;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .button:hover {
+        background-color: #b3d9b3;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Reload Amount</h1>
+      <div>
+        <div class="form-group">
+          <label for="id">ID:</label>
+          <input
+            type="text"
+            id="id"
+            name="id"
+            placeholder="Enter your ID"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="date">Date Posted:</label>
+          <input type="date" id="date" name="date" required />
+        </div>
+
+        <div class="form-group">
+          <label for="amount">Amount:</label>
+          <div style="position: relative">
+            <span
+              style="
+                position: absolute;
+                top: 50%;
+                left: 10px;
+                transform: translateY(-50%);
+                font-size: 1.1rem;
+                color: #333;
+              "
+            >
+              ₱
+            </span>
+            <input
+              type="number"
+              id="amount"
+              name="amount"
+              placeholder="Enter amount"
+              required
+              min="0"
+              step="1"
+              style="padding-left: 25px"
+            />
+          </div>
+        </div>
+
+        <div class="buttons-container">
+          <button type="submit" class="button" id="reload_btn">Reload</button>
+        </div>
+      </div>
+    </div>
+    <dialog id="successModal" style="padding: 2rem">
+      <div
+        style="
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: column;
+        "
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="6rem"
+          height="6rem"
+          viewBox="0 0 48 48"
+        >
+          <g
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="4"
+          >
+            <path
+              fill="#6dff2e"
+              stroke="#fcfcfc"
+              d="M24 4L29.2533 7.83204L35.7557 7.81966L37.7533 14.0077L43.0211 17.8197L41 24L43.0211 30.1803L37.7533 33.9923L35.7557 40.1803L29.2533 40.168L24 44L18.7467 40.168L12.2443 40.1803L10.2467 33.9923L4.97887 30.1803L7 24L4.97887 17.8197L10.2467 14.0077L12.2443 7.81966L18.7467 7.83204L24 4Z"
+            />
+            <path stroke="#fff" d="M17 24L22 29L32 19" />
+          </g>
+        </svg>
+        <h2 style="text-align: center">Registered Successfully</h2>
+        <button
+          style="
+            background: transparent;
+            width: 100px;
+            border-radius: 25px;
+            background-color: #4caf50;
+            margin-top: 15px;
+            padding: 0.2rem;
+          "
+        >
+          <p
+            style="text-align: center; font-weight: 900; color: white"
+            id="closeModal"
+          >
+            Close
+          </p>
+        </button>
+      </div>
+    </dialog>
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.js"
+      integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      function getCSRFToken() {
+        return document
+          .querySelector('meta[name="csrf-token"]')
+          .getAttribute("content");
+      }
+
+      function reloadBtn() {
+        $.ajax({
+          url: "http://127.0.0.1:8000/base/reload_amount",
+          method: "POST",
+          headers: {
+            "X-CSRFToken": getCSRFToken(), // Include the CSRF token
+          },
+          data: JSON.stringify({
+            id: $("#id").val(),
+            amount: $("#amount").val(),
+            date_post: $("#date").val(),
+          }),
+          success: (response) => {
+            modal.showModal();
+            $("input").val("");
+          },
+          error: function (xhr, status, error) {
+            console.log("Error", error);
+          },
+        });
+      }
+
+      const modal = document.querySelector("#successModal");
+
+      document.querySelector("#closeModal").addEventListener("click", () => {
+        modal.close();
+      });
+      document.querySelector("#reload_btn").addEventListener("click", () => {
+        reloadBtn();
+      });
+    </script>
+  </body>
+</html>
