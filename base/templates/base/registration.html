@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -189,11 +191,8 @@
     <div class="container">
       <div class="left-column">
         <div class="header">
-          <img
-            src="payease-logo.png"
-            alt="PayEase Logo"
-            class="spinning-logo"
-          />
+          <img src={% static "base/payease-logo.png" %} alt="PayEase Logo"
+          class="spinning-logo" />
 
           <h1>Welcome to <span>PayEase Registration</span></h1>
         </div>
